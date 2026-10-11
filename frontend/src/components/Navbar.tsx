@@ -1,6 +1,6 @@
-import React from 'react';
+import type { FC } from 'react';
 
-export const Navbar: React.FC = () => (
+export const Navbar: FC = () => (
   <header className="border-b border-slate-200 bg-white sticky top-0 z-10">
     <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
       <div className="flex items-center gap-3">
