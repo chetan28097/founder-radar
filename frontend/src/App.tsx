@@ -1,13 +1,13 @@
-import { useState } from 'react';
-import type { CandidateResult, SearchRequest } from './types';
+import React, { useState } from 'react';
+import type { CandidateResult, SearchRequest, SearchResponse } from './types';
 import { MOCK_CANDIDATES } from './mockData';
 
 export default function App() {
   const [candidates, setCandidates] = useState<CandidateResult[]>(MOCK_CANDIDATES);
-  const [loading, setLoading] = useState(false);
-  const [previousCompany, setPreviousCompany] = useState('Stripe');
-  const [windowMonths, setWindowMonths] = useState(6);
-  const [sector, setSector] = useState('AI Infrastructure');
+  const [loading, setLoading] = useState<boolean>(false);
+  const [previousCompany, setPreviousCompany] = useState<string>('Stripe');
+  const [windowMonths, setWindowMonths] = useState<number>(6);
+  const [sector, setSector] = useState<string>('AI Infrastructure');
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
   const handleSearch = async (e: React.FormEvent) => {
@@ -30,14 +30,19 @@ export default function App() {
       });
 
       if (!res.ok) throw new Error('Backend offline');
-      const data = await res.json();
+      const data: SearchResponse = await res.json();
       setCandidates(data.results);
     } catch {
-      // Fallback cleanly to mock data so UI stays interactive
       setCandidates(MOCK_CANDIDATES);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleDraftChange = (personId: string, updatedDraft: string) => {
+    setCandidates((prev) =>
+      prev.map((c) => (c.person_id === personId ? { ...c, outreach_draft: updatedDraft } : c))
+    );
   };
 
   const copyDraft = (id: string, text: string | null) => {
@@ -49,7 +54,6 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 pb-16 font-sans">
-      {/* Top Header */}
       <header className="border-b border-slate-200 bg-white sticky top-0 z-10">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -69,7 +73,6 @@ export default function App() {
         </div>
       </header>
 
-      {/* Main Container */}
       <main className="max-w-4xl mx-auto px-6 pt-8">
         <div className="mb-6">
           <h1 className="text-2xl font-extrabold tracking-tight text-slate-900">Stealth Founder Discovery</h1>
@@ -78,7 +81,6 @@ export default function App() {
           </p>
         </div>
 
-        {/* Search Bar Form */}
         <form onSubmit={handleSearch} className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm mb-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
             <div>
@@ -129,7 +131,6 @@ export default function App() {
           </div>
         </form>
 
-        {/* Candidate Cards */}
         <div className="space-y-4">
           {candidates.map((candidate) => (
             <article key={candidate.person_id} className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition">
@@ -179,7 +180,8 @@ export default function App() {
                   </button>
                 </div>
                 <textarea
-                  defaultValue={candidate.outreach_draft || ''}
+                  value={candidate.outreach_draft || ''}
+                  onChange={(e) => handleDraftChange(candidate.person_id, e.target.value)}
                   rows={3}
                   className="w-full text-xs p-3 border border-slate-200 rounded-xl text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-600 font-sans leading-relaxed"
                 />

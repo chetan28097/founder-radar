@@ -1,4 +1,4 @@
-import { CandidateResult } from './types';
+import type { CandidateResult } from './types';
 
 export const MOCK_CANDIDATES: CandidateResult[] = [
   {
@@ -25,29 +25,5 @@ export const MOCK_CANDIDATES: CandidateResult[] = [
     ],
     confidence: "high",
     outreach_draft: "Hi Elena,\n\nSaw your transition from the Stripe banking team to building Krypton Labs. Given your work on agent settlement rails, would love to compare notes on latency hurdles in real-time execution."
-  },
-  {
-    person_id: "crust-88124",
-    name: "Marcus Vance",
-    profile_url: "https://linkedin.com",
-    previous_company: "Stripe",
-    previous_role: "Engineering Manager",
-    transition_date: "2026-02",
-    transition_status: "Probable Stealth",
-    current_title: "Founder",
-    startup_name: null,
-    sector_hypothesis: "Developer Tooling / Observability",
-    sector_evidence: [
-      "Updated headline to 'Building next generation dev infrastructure'",
-      "Active commits on Rust-based telemetry parsers"
-    ],
-    fit_score: 82,
-    score_explanation: [
-      "+35: Senior engineering management pedigree",
-      "+30: Headline indicates early-stage exploration",
-      "+17: Active OSS code footprint in infrastructure"
-    ],
-    confidence: "medium",
-    outreach_draft: "Hey Marcus,\n\nNoticed you recently stepped out from Stripe to build in the dev infra space. Followed your recent work around telemetry parsing and wanted to connect."
   }
 ];
